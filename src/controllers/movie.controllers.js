@@ -38,7 +38,29 @@ const create = catchError(async(req, res) => {
 
 const getOne = catchError(async(req, res) => {
     const { id } = req.params;
-    const result = await Movie.findByPk(id, {include: [Genre, Actor, Director]});
+    const result = await Movie.findByPk(id, {
+        include: [
+            {
+               model: Genre,
+               attributes:{
+                exclude: ["createdAt" , "updatedAt"]
+               }
+            
+            }, 
+            {
+                model: Actor,
+                attributes:{
+                exclude: ["createdAt" , "updatedAt"]
+               }
+            },
+            {
+                model: Director,
+                attributes:{
+                exclude: ["createdAt" , "updatedAt"]
+               }
+            },
+        ]
+    });
     if(!result) return res.sendStatus(400);
     return res.json(result);
 });
